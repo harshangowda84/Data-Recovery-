@@ -38,7 +38,9 @@ def main():
         color = random.choice(["#eaf3fc", "#dbeafe", "#b6e0fe", "#f2f7fc"])
         circle = animated_canvas.create_oval(x, y, x+r, y+r, fill=color, outline="")
         circles.append((circle, x, y, r, random.choice([-1,1]), random.choice([-1,1])))
+    animation_id = None
     def animate():
+        nonlocal animation_id
         for i, (circle, x, y, r, dx, dy) in enumerate(circles):
             x += dx
             y += dy
@@ -46,7 +48,7 @@ def main():
             if y < 100 or y > 570: dy = -dy
             animated_canvas.coords(circle, x, y, x+r, y+r)
             circles[i] = (circle, x, y, r, dx, dy)
-        root.after(40, animate)
+        animation_id = root.after(40, animate)
     animate()
 
     # Enhanced Tagline under header
@@ -119,6 +121,8 @@ def main():
         username = username_entry.get()
         password = password_entry.get()
         if username == "admin" and password == "admin123":
+            if animation_id:
+                root.after_cancel(animation_id)
             root.destroy()
             show_case_prompt()
         else:
