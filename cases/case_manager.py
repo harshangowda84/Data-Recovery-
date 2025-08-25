@@ -10,13 +10,18 @@ class CaseManager:
     def create_case_table(self):
         self.conn.execute('''CREATE TABLE IF NOT EXISTS cases (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            analyst TEXT NOT NULL
+            case_id TEXT NOT NULL,
+            case_name TEXT NOT NULL,
+            investigator_name TEXT NOT NULL,
+            description TEXT
         )''')
         self.conn.commit()
 
-    def create_case(self, name, analyst):
-        self.conn.execute('INSERT INTO cases (name, analyst) VALUES (?, ?)', (name, analyst))
+    def save_case(self, case_id, case_name, investigator_name, description):
+        self.conn.execute(
+            'INSERT INTO cases (case_id, case_name, investigator_name, description) VALUES (?, ?, ?, ?)',
+            (case_id, case_name, investigator_name, description)
+        )
         self.conn.commit()
 
     def get_cases(self):

@@ -1,6 +1,13 @@
 import customtkinter as ctk
 import uuid
 from tkinter import messagebox
+import importlib.util
+import os
+case_manager_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../cases/case_manager.py'))
+spec = importlib.util.spec_from_file_location('case_manager', case_manager_path)
+case_manager = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(case_manager)
+CaseManager = case_manager.CaseManager
 
 def create_case_dialog():
     case_id = str(uuid.uuid4())[:8]
@@ -73,11 +80,27 @@ def create_case_dialog():
         if not inv or not cid or not cname:
             messagebox.showerror('Error', 'Investigator Name, Case ID, and Case Name are required.')
             return
-        messagebox.showinfo('Case Created', f'Investigator: {inv}\nCase ID: {cid}\nCase Name: {cname}\nDescription: {desc}')
+        # Make description optional
+        if desc == 'Enter case description...' or not desc:
+            desc = ''
+        try:
+            manager = CaseManager()
+            manager.save_case(cid, cname, inv, desc)
+            messagebox.showinfo('Case Created', f'Investigator: {inv}\nCase ID: {cid}\nCase Name: {cname}\nDescription: {desc}')
+        except Exception as e:
+            messagebox.showerror('Database Error', f'Failed to save case: {e}')
         win.destroy()
     create_btn = ctk.CTkButton(btn_frame, text='Create', command=submit, font=('Segoe UI', 14, 'bold'), fg_color='#008afc', hover_color='#005fa3', text_color='white', width=120)
     create_btn.pack(side='left', padx=(0, 18))
-    cancel_btn = ctk.CTkButton(btn_frame, text='Cancel', command=win.destroy, font=('Segoe UI', 14, 'bold'), fg_color='#fc3c3c', hover_color='#a30000', text_color='white', width=120)
+    def cancel():
+        win.destroy()
+        import importlib.util, os
+        case_prompt_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'case_prompt.py'))
+        spec = importlib.util.spec_from_file_location('case_prompt', case_prompt_path)
+        case_prompt_mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(case_prompt_mod)
+        case_prompt_mod.show_case_prompt()
+    cancel_btn = ctk.CTkButton(btn_frame, text='Cancel', command=cancel, font=('Segoe UI', 14, 'bold'), fg_color='#fc3c3c', hover_color='#a30000', text_color='white', width=120)
     cancel_btn.pack(side='left')
 
     win.mainloop()

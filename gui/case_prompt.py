@@ -23,19 +23,32 @@ def show_case_prompt():
 
     def create_case():
         win.destroy()
-        create_case_mod = importlib.import_module('create_case')
+        import importlib.util, os
+        create_case_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'create_case.py'))
+        spec = importlib.util.spec_from_file_location('create_case', create_case_path)
+        create_case_mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(create_case_mod)
         create_case_mod.create_case_dialog()
 
     def open_case():
         win.destroy()
-        messagebox.showinfo('Case', 'Proceed to open an existing case.')
+        import importlib.util, os
+        open_case_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'open_case.py'))
+        spec = importlib.util.spec_from_file_location('open_case', open_case_path)
+        open_case_mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(open_case_mod)
+        open_case_mod.open_case_dialog()
 
     # Both buttons have the same width and height
     button_width = 220
     button_height = 40
-    create_btn = ctk.CTkButton(btn_panel, text="Create New Case", font=("Segoe UI", 16, "bold"), fg_color="#008afc", hover_color="#005fa3", text_color="white", width=button_width, height=button_height)
+    create_btn = ctk.CTkButton(btn_panel, text="Create New Case", font=("Segoe UI", 16, "bold"), fg_color="#008afc", hover_color="#005fa3", text_color="white", width=button_width, height=button_height, command=create_case)
     create_btn.pack(side="left", padx=(32, 24), pady=20)
-    open_btn = ctk.CTkButton(btn_panel, text="Open Existing Case", font=("Segoe UI", 16, "bold"), fg_color="#fc3c3c", hover_color="#a30000", text_color="white", width=button_width, height=button_height)
+    open_btn = ctk.CTkButton(btn_panel, text="Open Existing Case", font=("Segoe UI", 16, "bold"), fg_color="#fc3c3c", hover_color="#a30000", text_color="white", width=button_width, height=button_height, command=open_case)
     open_btn.pack(side="left", padx=(24, 32), pady=20)
 
+
     win.mainloop()
+
+if __name__ == '__main__':
+    show_case_prompt()
