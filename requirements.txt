@@ -1,0 +1,6 @@
+pytsk3
+Pillow
+python-magic
+matplotlib
+reportlab
+sqlite3
