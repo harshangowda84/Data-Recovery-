@@ -1,56 +1,86 @@
-import tkinter as tk
-from tkinter import simpledialog, messagebox
+import customtkinter as ctk
 import uuid
+from tkinter import messagebox
 
 def create_case_dialog():
     case_id = str(uuid.uuid4())[:8]
     case_name = f"Case_{case_id}"
-    root = tk.Tk()
-    root.withdraw()
-    dialog = tk.Toplevel()
-    dialog.title('Create New Case')
-    dialog.geometry('400x270')
-    dialog.configure(bg='#f4f4f4')
-    # Header
-    header = tk.Frame(dialog, bg='#0084e8', height=50)
-    header.pack(fill='x')
-    header.pack_propagate(False)
-    tk.Label(header, text='Create New Case', bg='#0084e8', fg='white', font=('Arial', 16, 'bold')).pack(side='left', padx=20, pady=10)
-    # Form Frame
-    form = tk.Frame(dialog, bg='white', bd=1, relief='solid')
-    form.pack(pady=(20,0), ipadx=10, ipady=10, expand=True)
+    win = ctk.CTk()
+    win.title('Create New Case')
+    win.geometry('540x480')
+    win.resizable(False, False)
+    win.configure(fg_color="#f7f7f7")
+
+    # Header with icon
+    header_frame = ctk.CTkFrame(win, fg_color="#f7f7f7")
+    header_frame.pack(pady=(24, 0))
+    header_icon = ctk.CTkLabel(header_frame, text="\U0001F4C8", font=("Segoe UI", 32), text_color="#008afc")
+    header_icon.pack(side="left", padx=(0, 12))
+    header = ctk.CTkLabel(header_frame, text='Create New Case', font=('Segoe UI', 24, 'bold'), text_color='#008afc')
+    header.pack(side="left")
+
+    # Form Frame (card)
+    form = ctk.CTkFrame(win, fg_color='white', corner_radius=18)
+    form.pack(pady=(18, 24), padx=32, fill='x')
+
+    # Investigator Name
+    inv_icon = ctk.CTkLabel(form, text="\U0001F464", font=("Segoe UI", 18), text_color="#008afc")
+    inv_icon.grid(row=0, column=0, sticky='e', padx=(18, 6), pady=(22, 12))
+    inv_label = ctk.CTkLabel(form, text='Investigator Name:', font=('Segoe UI', 14, 'bold'), text_color='#222')
+    inv_label.grid(row=0, column=1, sticky='e', padx=(0, 12), pady=(22, 12))
+    inv_entry = ctk.CTkEntry(form, font=('Segoe UI', 14), width=260, placeholder_text='Enter investigator name')
+    inv_entry.configure(fg_color='white', text_color='black', placeholder_text_color='#888')
+    inv_entry.grid(row=0, column=2, padx=(0, 18), pady=(22, 12))
+
     # Case ID
-    tk.Label(form, text='Case ID:', bg='white', anchor='w', font=('Arial', 10)).grid(row=0, column=0, padx=10, pady=10, sticky='e')
-    case_id_entry = tk.Entry(form, bd=1, relief='solid', font=('Arial', 10))
-    case_id_entry.grid(row=0, column=1, padx=10, pady=10, sticky='w')
-    case_id_entry.insert(0, case_id)
+    cid_icon = ctk.CTkLabel(form, text="\U0001F194", font=("Segoe UI", 18), text_color="#008afc")
+    cid_icon.grid(row=1, column=0, sticky='e', padx=(18, 6), pady=(12, 12))
+    cid_label = ctk.CTkLabel(form, text='Case ID:', font=('Segoe UI', 14, 'bold'), text_color='#222')
+    cid_label.grid(row=1, column=1, sticky='e', padx=(0, 12), pady=(12, 12))
+    cid_entry = ctk.CTkEntry(form, font=('Segoe UI', 14), width=260)
+    cid_entry.configure(fg_color='white', text_color='black', placeholder_text_color='#888')
+    cid_entry.grid(row=1, column=2, padx=(0, 18), pady=(12, 12))
+    cid_entry.insert(0, case_id)
+
     # Case Name
-    tk.Label(form, text='Case Name:', bg='white', anchor='w', font=('Arial', 10)).grid(row=1, column=0, padx=10, pady=10, sticky='e')
-    case_name_entry = tk.Entry(form, bd=1, relief='solid', font=('Arial', 10))
-    case_name_entry.grid(row=1, column=1, padx=10, pady=10, sticky='w')
-    case_name_entry.insert(0, case_name)
-    # Description
-    tk.Label(form, text='Description:', bg='white', anchor='w', font=('Arial', 10)).grid(row=2, column=0, padx=10, pady=10, sticky='ne')
-    desc_entry = tk.Text(form, height=2, width=25, bd=1, relief='solid', font=('Arial', 10))
-    desc_entry.grid(row=2, column=1, padx=10, pady=10, sticky='w')
+    cname_icon = ctk.CTkLabel(form, text="\U0001F4D6", font=("Segoe UI", 18), text_color="#008afc")
+    cname_icon.grid(row=2, column=0, sticky='e', padx=(18, 6), pady=(12, 12))
+    cname_label = ctk.CTkLabel(form, text='Case Name:', font=('Segoe UI', 14, 'bold'), text_color='#222')
+    cname_label.grid(row=2, column=1, sticky='e', padx=(0, 12), pady=(12, 12))
+    cname_entry = ctk.CTkEntry(form, font=('Segoe UI', 14), width=260)
+    cname_entry.configure(fg_color='white', text_color='black', placeholder_text_color='#888')
+    cname_entry.grid(row=2, column=2, padx=(0, 18), pady=(12, 12))
+    cname_entry.insert(0, case_name)
+
+    # Case Description
+    desc_icon = ctk.CTkLabel(form, text="\U0001F4DD", font=("Segoe UI", 18), text_color="#008afc")
+    desc_icon.grid(row=3, column=0, sticky='ne', padx=(18, 6), pady=(12, 18))
+    desc_label = ctk.CTkLabel(form, text='Case Description:', font=('Segoe UI', 14, 'bold'), text_color='#222')
+    desc_label.grid(row=3, column=1, sticky='ne', padx=(0, 12), pady=(12, 18))
+    desc_entry = ctk.CTkTextbox(form, font=('Segoe UI', 14), width=260, height=90, border_width=2, border_color="#b0b0b0")
+    desc_entry.configure(fg_color='white', text_color='black')
+    desc_entry.grid(row=3, column=2, padx=(0, 18), pady=(12, 18))
+    desc_entry.insert('1.0', 'Enter case description...')
+
     # Button Frame
-    btn_frame = tk.Frame(form, bg='white')
-    btn_frame.grid(row=3, column=0, columnspan=2, pady=(10,0))
+    btn_frame = ctk.CTkFrame(form, fg_color='white')
+    btn_frame.grid(row=4, column=0, columnspan=3, pady=(8, 18))
     def submit():
-        cid = case_id_entry.get().strip()
-        cname = case_name_entry.get().strip()
-        desc = desc_entry.get('1.0', tk.END).strip()
-        if not cid or not cname:
-            messagebox.showerror('Error', 'Case ID and Case Name are required.')
+        inv = inv_entry.get().strip()
+        cid = cid_entry.get().strip()
+        cname = cname_entry.get().strip()
+        desc = desc_entry.get('1.0', 'end').strip()
+        if not inv or not cid or not cname:
+            messagebox.showerror('Error', 'Investigator Name, Case ID, and Case Name are required.')
             return
-        messagebox.showinfo('Case Created', f'Case ID: {cid}\nCase Name: {cname}\nDescription: {desc}')
-        dialog.destroy()
-        root.destroy()
-    create_btn = tk.Button(btn_frame, text='Create', command=submit, bg='#0084e8', fg='white', font=('Arial', 10, 'bold'), bd=0, activebackground='#005fa3', activeforeground='white')
-    create_btn.grid(row=0, column=0, padx=10)
-    cancel_btn = tk.Button(btn_frame, text='Cancel', command=lambda: [dialog.destroy(), root.destroy()], bg='#e84141', fg='white', font=('Arial', 10, 'bold'), bd=0, activebackground='#a32f2f', activeforeground='white')
-    cancel_btn.grid(row=0, column=1, padx=10)
-    dialog.mainloop()
+        messagebox.showinfo('Case Created', f'Investigator: {inv}\nCase ID: {cid}\nCase Name: {cname}\nDescription: {desc}')
+        win.destroy()
+    create_btn = ctk.CTkButton(btn_frame, text='Create', command=submit, font=('Segoe UI', 14, 'bold'), fg_color='#008afc', hover_color='#005fa3', text_color='white', width=120)
+    create_btn.pack(side='left', padx=(0, 18))
+    cancel_btn = ctk.CTkButton(btn_frame, text='Cancel', command=win.destroy, font=('Segoe UI', 14, 'bold'), fg_color='#fc3c3c', hover_color='#a30000', text_color='white', width=120)
+    cancel_btn.pack(side='left')
+
+    win.mainloop()
 
 if __name__ == '__main__':
     create_case_dialog()
