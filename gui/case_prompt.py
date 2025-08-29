@@ -21,6 +21,13 @@ def show_case_prompt():
     btn_panel.pack(pady=(0, 32))
     btn_panel.pack_propagate(False)
 
+    def launch_main_page(case_name):
+        import customtkinter as ctk
+        from main_page import MainPage
+        win = ctk.CTk()
+        MainPage(win, case_name)
+        win.mainloop()
+
     def create_case():
         win.destroy()
         import importlib.util, os
@@ -28,7 +35,7 @@ def show_case_prompt():
         spec = importlib.util.spec_from_file_location('create_case', create_case_path)
         create_case_mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(create_case_mod)
-        create_case_mod.create_case_dialog()
+        create_case_mod.create_case_dialog(on_case_created=launch_main_page)
 
     def open_case():
         win.destroy()

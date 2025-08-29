@@ -9,7 +9,7 @@ case_manager = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(case_manager)
 CaseManager = case_manager.CaseManager
 
-def create_case_dialog():
+def create_case_dialog(on_case_created=None):
     case_id = str(uuid.uuid4())[:8]
     case_name = f"Case_{case_id}"
     win = ctk.CTk()
@@ -87,9 +87,11 @@ def create_case_dialog():
             manager = CaseManager()
             manager.save_case(cid, cname, inv, desc)
             messagebox.showinfo('Case Created', f'Investigator: {inv}\nCase ID: {cid}\nCase Name: {cname}\nDescription: {desc}')
+            win.destroy()
+            if on_case_created:
+                on_case_created(cname)
         except Exception as e:
             messagebox.showerror('Database Error', f'Failed to save case: {e}')
-        win.destroy()
     create_btn = ctk.CTkButton(btn_frame, text='Create', command=submit, font=('Segoe UI', 14, 'bold'), fg_color='#008afc', hover_color='#005fa3', text_color='white', width=120)
     create_btn.pack(side='left', padx=(0, 18))
     def cancel():

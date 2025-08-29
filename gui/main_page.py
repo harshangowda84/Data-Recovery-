@@ -13,9 +13,12 @@ except ImportError:
 	win32file = None
 
 class MainPage:
-	def __init__(self, win):
+	def __init__(self, win, case_name=None):
 		self.win = win
-		self.win.title('Data Reviver - Forensic Analysis Tool - Investigation_20250821 (Case ID: 1498B1FD)')
+		title = f'Data Reviver - Forensic Analysis Tool'
+		if case_name:
+			title += f' - {case_name}'
+		self.win.title(title)
 		self.win.geometry('1250x750')
 		self.win.resizable(True, True)
 		self.setup_ui()
