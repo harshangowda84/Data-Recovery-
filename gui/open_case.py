@@ -50,6 +50,19 @@ def open_case_dialog():
         desc = case[4] if case[4] else '(No description)'
         details_label.configure(text=f"Case Name: {cname}\nCase ID: {cid}\nInvestigator: {inv}\nDescription: {desc}")
 
+        # Add Open button to launch main page with selected case name
+        if hasattr(details_frame, 'open_btn') and details_frame.open_btn:
+            details_frame.open_btn.destroy()
+        def open_main():
+            win.destroy()
+            import customtkinter as ctk
+            from main_page import MainPage
+            main_win = ctk.CTk()
+            MainPage(main_win, cname)
+            main_win.mainloop()
+        details_frame.open_btn = ctk.CTkButton(details_frame, text='Open This Case', font=('Segoe UI', 14, 'bold'), fg_color='#008afc', hover_color='#005fa3', text_color='white', width=180, command=open_main)
+        details_frame.open_btn.pack(pady=(18, 8))
+
     case_buttons = []
     def populate_list(filter_text=None):
         for btn in case_buttons:
